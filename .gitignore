@@ -1,0 +1,7 @@
+*.bin
+*.obj
+*.NSF
+*.NSD
+*.exe
+*.dll
+SC?S_???.??
