@@ -32,7 +32,7 @@
 ** Parameters - you can make up any parameters you want within the
 ** PSFDRV_PARAM block.
 */
-#define PARAM_MVOL     (*((unsigned char*)(PSFDRV_PARAM+0x0000)))
+#define PARAM_SEQVOL   (*((unsigned char*)(PSFDRV_PARAM+0x0000)))
 #define PARAM_TICKMODE (*((unsigned char*)(PSFDRV_PARAM+0x000C)))
 #define PARAM_LOOPOFF  (*((unsigned char*)(PSFDRV_PARAM+0x0010)))
 #define PARAM_SEQNUM   (*((unsigned char*)(PSFDRV_PARAM+0x0014)))
@@ -121,7 +121,7 @@ unsigned long driverinfo[] = {
   ** List of parameters (name,address,bytesize)
   ** This is a 0-terminated list.
   */
-  (int)"mvol",     (int)(&PARAM_MVOL),     1,
+  (int)"seqvol",   (int)(&PARAM_SEQVOL),   1,
   (int)"tickmode", (int)(&PARAM_TICKMODE), 1,
   (int)"loop_off", (int)(&PARAM_LOOPOFF ), 1,
   (int)"seqnum",   (int)(&PARAM_SEQNUM)  , 1,
@@ -219,18 +219,17 @@ int psfdrv(void) {
   vh  = (void*)(MY_VH);
   vb  = (void*)(MY_VB);
 
-  // DO NOT CHANGE THIS VALUE!! (Game-specific reason: Some notes will be dropped if seqvol > 0x5F)
-  seqvol = 0x5F;
+  mvol = 0x7F;  // Constant
 
   /*
   ** Retrieve parameters and set useful defaults if they're zero
   */
-  mvol     = PARAM_MVOL;
+  seqvol   = PARAM_SEQVOL;    // Set 0x7F(127d) for Crash 1 and 2, 0x5F(95d) for Crash 3
   tickmode = PARAM_TICKMODE;
   loop_off = PARAM_LOOPOFF;
   seqnum   = PARAM_SEQNUM;
   maxseq   = PARAM_MAXSEQ;
-  if(!mvol)     mvol      = 0x7F;
+  if(!seqvol)   seqvol    = 0x5F;
   if(!seqnum)   seqnum    = 0;
   if(!tickmode) tickmode  = 1;
   if(!maxseq)   maxseq    = 1;
